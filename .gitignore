@@ -1,9 +1,12 @@
 checkpoints/*
 checkpoints_2/*
+checkpoints_3/*
 Plots/*
 Plots_2/*
+Plots_3/*
 trained_models/*
 trained_models_2/*
+trained_models_3/*
 .ipynb_checkpoints/*
 __pycache__/*
 *.ipynb

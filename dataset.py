@@ -56,13 +56,13 @@ class DatasetTrain(torch.utils.data.Dataset):
         ################################################################################################################
         # select a 512x512 random crop from the img and labels (gt_sssr and gt_sisr) and downsample the img to 256x256:
         ################################################################################################################
-        #start_x = np.random.randint(low=0, high=(self.img_w - 512))
-        #end_x = start_x + 512
-        #start_y = np.random.randint(low=0, high=(self.img_h - 512))
-        #end_y = start_y + 512
+        start_x = np.random.randint(low=0, high=(self.img_w - 512))
+        end_x = start_x + 512
+        start_y = np.random.randint(low=0, high=(self.img_h - 512))
+        end_y = start_y + 512
 
-        #gt_sisr = gt_sisr[start_y:end_y, start_x:end_x] # (shape: (512, 512, 3))
-        #gt_sssr = gt_sssr[start_y:end_y, start_x:end_x] # (shape: (512, 512))
+        gt_sisr = gt_sisr[start_y:end_y, start_x:end_x] # (shape: (512, 512, 3))
+        gt_sssr = gt_sssr[start_y:end_y, start_x:end_x] # (shape: (512, 512))
         
         ################################################################################################################
         # flip the img and the label with 0.5 probability:
@@ -75,8 +75,8 @@ class DatasetTrain(torch.utils.data.Dataset):
         ################################################################################################################
         # resize gt_sisr without interpolation to obtain img (the one used for training in both SSSR and SISR branches)
         ################################################################################################################
-        #img = resize(gt_sisr, (256, 256), preserve_range=True, anti_aliasing=True) # (shape: (256, 256, 3))
-        img = resize(gt_sisr, (self.new_img_h, self.new_img_w), preserve_range=True, anti_aliasing=True) # (shape: (512, 1024, 3))
+        img = resize(gt_sisr, (256, 256), preserve_range=True, anti_aliasing=True) # (shape: (256, 256, 3))
+        #img = resize(gt_sisr, (self.new_img_h, self.new_img_w), preserve_range=True, anti_aliasing=True) # (shape: (512, 1024, 3))
             
         ################################################################################################################
         # normalize the img (with the mean and std):

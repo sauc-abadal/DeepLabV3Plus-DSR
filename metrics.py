@@ -380,7 +380,8 @@ class Jaccard(object):
                 _sum = torch.sum(y_true_ch + y_pred_ch).float()
                 performs[int(ch)] = _intersec / (_sum - _intersec + eps)
             mperforms = sum([i*j for (i, j) in zip(performs, weights)])
-        return mperforms, performs
+            miou = performs.mean()
+        return mperforms, miou, performs
 
 # modified by me
 class RMSE(object):
