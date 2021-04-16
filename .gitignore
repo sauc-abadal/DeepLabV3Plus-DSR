@@ -1,0 +1,9 @@
+checkpoints/*
+checkpoints_2/*
+Plots/*
+Plots_2/*
+trained_models/*
+trained_models_2/*
+.ipynb_checkpoints/*
+__pycache__/*
+*.ipynb
