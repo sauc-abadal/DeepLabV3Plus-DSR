@@ -53,18 +53,18 @@ ssim = metrics.SSIM()
 ########### LOSS AND OPTIMIZER #############################################################################################################
 ############################################################################################################################################
 l_ce = nn.CrossEntropyLoss(weight=class_weights)
-#l_mse = nn.MSELoss()
-l_l1 = nn.L1Loss()
+l_mse = nn.MSELoss()
+#l_l1 = nn.L1Loss()
 
 # w1 and w2 set to make the loss value ranges comparable
-w1 = 1.0
+w1 = 0.1
 w2 = 1.0
 
 def loss_func(sssr, sisr, gt_sssr, gt_sisr, sssr_FA, train=True):
     sssr_sim_mt = utils.similarity_matrix(sssr_FA, train)
     sisr_sim_mt = utils.similarity_matrix(sisr.detach(), train)
-    #loss = l_ce(sssr, gt_sssr) + w1*l_mse(sisr, gt_sisr) + w2*utils.FA_Loss(sssr_sim_mt, sisr_sim_mt)
-    loss = l_ce(sssr, gt_sssr) + w1*l_l1(sisr, gt_sisr) + w2*utils.FA_Loss(sssr_sim_mt, sisr_sim_mt)
+    loss = l_ce(sssr, gt_sssr) + w1*l_mse(sisr, gt_sisr) + w2*utils.FA_Loss(sssr_sim_mt, sisr_sim_mt)
+    #loss = l_ce(sssr, gt_sssr) + w1*l_l1(sisr, gt_sisr) + w2*utils.FA_Loss(sssr_sim_mt, sisr_sim_mt)
     return loss
 
 model = DeepLabV3Plus(
@@ -89,7 +89,7 @@ optimizer = optim.Adam(model.parameters(), lr=lr)
 
 scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.5)
 
-PATH = "./deeplab2s_backup/checkpoints_3/DSR_state_l1_2.pth"
+PATH = "./deeplab2s_backup/checkpoints_3/DSR_state_0.pth"
 model, optimizer, scheduler, start_epoch, train_loss, valid_loss, train_w_iou, train_m_iou, valid_w_iou, valid_m_iou, train_rmse, valid_rmse = utils.load_checkpoint(model, optimizer, scheduler, PATH)
 
 ############################################################################################################################################
@@ -202,7 +202,7 @@ def train_model(model, loss_func, optimizer, scheduler, start_epoch, train_loss,
                 'valid_m_iou': valid_m_iou,
                 'valid_rmse': valid_rmse
             }
-            torch.save(state, "./deeplab2s_backup/checkpoints_3/DSR_state_l1_3.pth")
+            torch.save(state, "./deeplab2s_backup/checkpoints_3/DSR_state_1.pth")
         print() # end of epoch
 
     print('Finished Training!')
@@ -219,7 +219,7 @@ def train_model(model, loss_func, optimizer, scheduler, start_epoch, train_loss,
     ax1.set_title('Training vs Validation Loss')
     ax1.legend()
     plt.close(fig1)
-    fig1.savefig('./deeplab2s_backup/Plots_3/loss_v_state_l1_2.png')
+    fig1.savefig('./deeplab2s_backup/Plots_3/loss_v_state_1.png')
 
     fig2, ax2 = plt.subplots( nrows=1, ncols=1 )  # create figure & 2 axis
     ax2.plot(range(0, end_epoch), train_w_iou, label="Training wIoU")
@@ -229,7 +229,7 @@ def train_model(model, loss_func, optimizer, scheduler, start_epoch, train_loss,
     ax2.set_title('Training vs Validation wIoU')
     ax2.legend()
     plt.close(fig2)
-    fig2.savefig('./deeplab2s_backup/Plots_3/w_iou_v_state_l1_2.png')
+    fig2.savefig('./deeplab2s_backup/Plots_3/w_iou_v_state_1.png')
 
     fig3, ax3 = plt.subplots( nrows=1, ncols=1 )  # create figure & 3 axis
     ax3.plot(range(0, end_epoch), train_m_iou, label="Training mIoU")
@@ -239,7 +239,7 @@ def train_model(model, loss_func, optimizer, scheduler, start_epoch, train_loss,
     ax3.set_title('Training vs Validation mIoU')
     ax3.legend()
     plt.close(fig3)
-    fig3.savefig('./deeplab2s_backup/Plots_3/m_iou_v_state_l1_2.png')
+    fig3.savefig('./deeplab2s_backup/Plots_3/m_iou_v_state_1.png')
 
     fig4, ax4 = plt.subplots( nrows=1, ncols=1 )  # create figure & 4 axis
     ax4.plot(range(0, end_epoch), train_rmse, label="Training RMSE")
@@ -249,9 +249,9 @@ def train_model(model, loss_func, optimizer, scheduler, start_epoch, train_loss,
     ax4.set_title('Training vs Validation RMSE')
     ax4.legend()
     plt.close(fig4)
-    fig4.savefig('./deeplab2s_backup/Plots_3/rmse_v_state_l1_2.png')
+    fig4.savefig('./deeplab2s_backup/Plots_3/rmse_v_state_1.png')
     
     return model
 
 model = train_model(model, loss_func, optimizer, scheduler, start_epoch, train_loss, valid_loss, train_w_iou, train_m_iou, valid_w_iou, valid_m_iou, train_rmse, valid_rmse, num_epochs=1)
-torch.save(model.state_dict(), "./deeplab2s_backup/trained_models_3/DSR_v_l1_2.pth")
+torch.save(model.state_dict(), "./deeplab2s_backup/trained_models_3/DSR_v_1.pth")

@@ -240,8 +240,10 @@ def load_checkpoint(model, optimizer, scheduler, PATH):
         scheduler.load_state_dict(checkpoint['scheduler_state_dict'])
         train_loss = checkpoint['train_loss']
         valid_loss = checkpoint['valid_loss']
-        train_iou = checkpoint['train_iou']
-        valid_iou = checkpoint['valid_iou']
+        train_w_iou = checkpoint['train_w_iou']
+        train_m_iou = checkpoint['train_m_iou']
+        valid_w_iou = checkpoint['valid_w_iou']
+        valid_m_iou = checkpoint['valid_m_iou']
         train_rmse = checkpoint['train_rmse']
         valid_rmse = checkpoint['valid_rmse']
         print("=> loaded checkpoint '{}' (epoch {})".format(PATH, checkpoint['epoch']))     
@@ -250,9 +252,11 @@ def load_checkpoint(model, optimizer, scheduler, PATH):
         start_epoch = 0
         train_loss = []
         valid_loss = []
-        train_iou = []
-        valid_iou = []
+        train_w_iou = []
+        train_m_iou = []
+        valid_w_iou = []
+        valid_m_iou = []
         train_rmse = []
         valid_rmse = []
     
-    return model, optimizer, scheduler, start_epoch, train_loss, valid_loss, train_iou, valid_iou, train_rmse, valid_rmse
+    return model, optimizer, scheduler, start_epoch, train_loss, valid_loss, train_w_iou, train_m_iou, valid_w_iou, valid_m_iou, train_rmse, valid_rmse
